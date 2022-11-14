@@ -1,0 +1,90 @@
+﻿@model WebAppCore1.ViewModels.ItemViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+@section Scripts {
+    <script>
+            $("#create").click(function () {
+                var name = $("#name").val();
+                var code = $("#code").val();
+                var desc = $("#desc").val();
+                var price = $("#price").val();
+                var cat = $("#cat").val();
+                var img = $("#image").val();
+
+                if (name == '' || code == '' || desc == '' || price == '' || cat == '' || img =='')
+                {
+                    alert("Please fill all required fields! " + name + code+ desc + price + cat + img);
+                    return false;
+                }
+                else
+                    return true;
+            });
+
+        function ResetItem() {
+            $("#cat").val("1");
+            $("#code").val("");
+            $("#name").val("");
+            $("#desc").val("");
+            $("#price").val("");
+            $("#image").val("");
+        }
+    </script>
+    }
+    <h1>Add new Items</h1>
+
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <!--<-->@*div class="form-group">
+            <label asp-for="ItemId" class="control-label"></label>
+            <input asp-for="ItemId" id="id" class="form-control" />
+            <span asp-validation-for="ItemId" class="text-danger"></span>
+        </div>*@
+                @Html.HiddenFor(model=> model.ItemId)
+                <div class="form-group">
+                    <label asp-for="ItemName" class="control-label"></label>
+                    <input asp-for="ItemName" id="name" class="form-control" />
+                    <span asp-validation-for="ItemName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ItemCode" class="control-label"></label>
+                    <input asp-for="ItemCode" id="code" class="form-control" />
+                    <span asp-validation-for="ItemCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" id="desc" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ItemPrice" class="control-label"></label>
+                    <input asp-for="ItemPrice" id="price" class="form-control" />
+                    <span asp-validation-for="ItemPrice" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ImagePath" class="control-label"></label>
+                    <input asp-for="ImagePath" type="file" id="image" class="form-control" />
+                    <span asp-validation-for="ImagePath" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CategoryId" class="control-label"></label>
+                    <select asp-for="CategoryId" id="cat" class="form-control" asp-items="@(new SelectList(ViewBag.message,"CategoryId","CategoryName"))"></select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" id="create" class="btn btn-primary" />
+                    &nbsp;
+                    <input type="button" value="Cancel" id="btnCancel" class="btn btn-danger" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+

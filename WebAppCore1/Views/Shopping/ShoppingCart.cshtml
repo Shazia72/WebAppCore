@@ -1,0 +1,82 @@
+﻿@model IEnumerable<WebAppCore1.ViewModels.ShoppingCartModel>
+@{
+    ViewBag.Title = "ShoppingCart";
+    decimal TotalAmount = 0.00M;
+}
+@section Scripts{
+    <script>
+
+        function RemoveFromCart(valueSentFromclick) {
+             var ItemId = $(valueSentFromclick).attr("attributeOfItemId");
+        $.ajax({
+            type: 'POST',
+                url: '/Shopping/DeleteItem',
+            data: { ItemId: ItemId },
+            success: function (response) {
+                    $(valueSentFromclick).closest('tr').remove();
+                if(response)
+                        $("li#tt").text("Cart(" + response + ")");
+            },
+            error: function() {
+                alert("Some error occurs?");
+            }
+        });
+        }
+
+    </script>
+}
+<h2>ShoppingCart</h2>
+@using (Html.BeginForm("SaveOrder", "Shopping", FormMethod.Post))
+{
+    <table class="table-condensed" style="width:100%">
+        @if (Model == null)
+        {
+            <tr><td><h3>Your Cart is empty</h3></td></tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                TotalAmount = item.Total + TotalAmount;
+                <tr>
+                    <td>
+                        <img src="/images/@Url.Content(item.ImagePath)" height="50" width="50" class="img-rounded" />
+                    </td>
+                    <td>
+                        @item.ItemName
+                    </td>
+                    <td style="text-align:right">
+                        @item.Quantity.ToString("#,##0")
+                    </td>
+                    <td style="text-align:right">
+                        @item.UnitPrice.ToString("#,##0.00")
+                    </td>
+                    <td style="text-align:right">
+                        @item.Total.ToString("#,##0.00")
+                    </td>
+                    <td style="text-align:right">
+                        <input type="button" value="Remove" class="btn btn-primary" attributeOfItemId="@item.ItemId" id="btnRemoveFromCart" onclick="RemoveFromCart(this)" />
+                    </td>
+                </tr>
+
+            }
+            <tr style="border-top: 2px solid maroon">
+                <td colspan="4" style="text-align:right">
+                    <h3>Total Amount</h3>
+                </td>
+                <td style="text-align:right">
+                    <h3>@TotalAmount.ToString("#,##0.00")</h3>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5" style="text-align:right">
+                    <input type="submit" value="Save" name="Save" class="btn btn-primary" />
+                </td>
+
+                <td colspan="5" style="text-align:right">
+                    <a asp-action="Shopping" asp-controller="Shopping"> Back To Shopping </a>
+                </td>
+            </tr>
+        }
+    </table>
+}

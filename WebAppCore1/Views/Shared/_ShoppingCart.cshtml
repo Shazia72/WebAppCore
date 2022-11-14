@@ -1,0 +1,20 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Mvc
+@using WebAppCore1.Helper;
+@inject IHttpContextAccessor HttpContextAccessor
+
+<ul class="nav navbar-nav navbar-right">
+<li id="tt">
+        @if (HttpContextAccessor.HttpContext.Session.GetString("CartCounter") == null)
+        {
+            string t = HttpContextAccessor.HttpContext.Session.GetString("CartCounter");
+            @Html.ActionLink("Cart(0)", "ShoppingCart", "Shopping", new { @id = "cartItem" })
+        }
+        else
+        {
+            string t = HttpContextAccessor.HttpContext.Session.GetString("CartCounter");
+            @Html.ActionLink("Cart(" + HttpContextAccessor.HttpContext.Session.GetString("CartCounter") + ")", "ShoppingCart", "Shopping", new { @id = "cartItem" })
+        }
+       
+</li>
+</ul>

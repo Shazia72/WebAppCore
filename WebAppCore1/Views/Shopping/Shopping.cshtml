@@ -1,0 +1,69 @@
+﻿@model IEnumerable<WebAppCore1.ViewModels.ShoppingCartViewModel>
+@{
+    ViewBag.Title = "Index";
+}
+@section Scripts{
+
+<script>
+    function AddtoCart(valueSentFromclick) {
+        var ItemId = $(valueSentFromclick).attr("attributeOfItemId");
+        $.ajax({
+            type: 'POST',
+            url: '/Shopping/AddToCart',
+            data: { ItemId: ItemId },
+            success: function (response) {
+                $("li#tt").text("Cart(" + response + ")");
+            },
+            error: function() {
+                alert("Some error occurs?");
+            }
+        });
+    }
+
+    $("img").click(function (item) {
+
+        alert(item);
+    });
+
+</script>
+}
+<div class="container">
+    <div class="row">
+        <h2 class="text-center">Your Favourite Collection</h2>
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4" style="border:2px solid white">
+
+                <div style="text-align:center; border-bottom: 2px solid maroon">
+                    <h3>@item.ItemName</h3>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <a href="@Url.Action("SingleProduct","Item", new { @item.ItemId})">
+                            <img class="img-responsive" src="/images/@Url.Content(item.ImagePath)" height="150" width="150" />
+                        </a>
+                    </div>
+                    <div class="col-md-4" style="text-align:left">
+                        <b>@item.Description</b>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-8" style="font-size: 18px; border-top: 2px solid maroon; padding:2px">
+                        <b>@item.ItemPrice.ToString("#,##0.00 PKR")</b>
+                    </div>
+                    <div class="col-md-4" style="text-align:right; margin-bottom: 10px; border-top: 2px solid maroon; padding:2px">
+                        <input type="button" name="AddToCart" value="Add to Cart" class="btn btn-primary" attributeOfItemId="@item.ItemId" id="btnAddToCart" onclick="AddtoCart(this)" />
+                    </div>
+                </div>
+
+            </div>
+        }
+        <div colspan="4">
+        <a asp-area="" asp-controller="Shopping" asp-action="ClearCart"> Clear Cart</a>
+        <a asp-area="" asp-controller="Shopping" asp-action="ShoppingCart"> View Cart</a>
+        </div>
+    </div>
+</div>
+
